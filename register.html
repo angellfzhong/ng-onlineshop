@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>线上生活超市触屏版</title>
+    <script type="text/javascript" src="js/main.js"></script>
+    <link href="css/style.css" rel="stylesheet">
+
+</head>
+
+<body ng-app="regApp" ng-controller="regCtrl">
+    <h2 class="login">用户注册</h2>
+    <form name="regform" novalidate>
+        <div class="login-bc">
+            <div class="input-bc">
+                <label>
+                    <span>用户名</span>
+                    <input name="Uname" type="text" placeholder="请输入用户名" ng-model="User.Uname" required ng-pattern="/^[0-9a-zA-Z\u4e00-\u9fa5_]{4,16}$/"
+                        ng-maxlength="16" ng-blur="checkName(User.Uname)">
+                    <span class="cancelinput" ng-show="regform.Uname.$viewValue" ng-click="User.Uname=''"></span>
+                </label>
+            </div>
+            <div class="input-bc">
+                <label>
+                    <span>手机号</span>
+                    <input name="Uphone" type="tel" placeholder="请输入11位手机号" maxlength="11" ng-model="User.Uphone" ng-pattern="/^([1]+\d{10})/"
+                        required>
+                    <span class="cancelinput" ng-show="regform.Uphone.$viewValue" ng-click="User.Uphone=''"></span>
+                </label>
+            </div>
+            <div class="input-bc">
+                <label>
+                    <span>设置密码</span>
+                    <input name="Upwd" type="password" placeholder="请输入密码" ng-model="User.Upwd" required ng-pattern="/^[^\s]{6,16}$/" ng-maxlength="16">
+                    <span class="cancelinput" ng-show="regform.Upwd.$viewValue" ng-click="User.Upwd= ''"></span>
+                </label>
+            </div>
+            <div class="input-bc">
+                <label>
+                    <span>重复密码</span>
+                    <input name="Upwd0" type="password" placeholder="请再次输入密码" ng-model="User.Upwd0" required ng-pattern="/^[^\s]{6,16}$/" ng-maxlength="16">
+                    <span class="cancelinput" ng-show="regform.Upwd0.$viewValue" ng-click="User.Upwd0 = ''"></span>
+                </label>
+            </div>
+        </div>
+
+        <button class="login-btn" type="button" ng-class="{'disabled':regform.$invalid || nameEnable}" ng-disabled="regform.$invalid || nameEnable"
+            ng-click="addUser($event, User)">
+            注册
+        </button>
+        <div ng-show="regform.$dirty">
+            <p class="tips" ng-if="regform.Uname.$viewValue && regform.Uname.$invalid ">4-16位的汉字、数字、字母、下划线</p>
+            <p class="tips" ng-if="nameEnable">用户名已存在</p>
+            <p class="tips" ng-if="regform.Uphone.$viewValue && regform.Uphone.$invalid ">请输入正确的手机号</p>
+            <p class="tips" ng-if="regform.Upwd.$viewValue && regform.Upwd.$invalid">密码必须为6-16位的数字、字母或符号,不能包含空格</p>
+            <p class="tips" ng-if="regform.Upwd0.$viewValue && regform.Upwd0.$viewValue !=regform.Upwd.$viewValue">两次密码必须相同</p>
+        </div>
+    </form>
+    <div id="login"></div>
+    <script type="text/javascript" src="script/angular.min.js"></script>
+    <script type="text/javascript" src="script/angular-touch.min.js"></script>
+    <script>
+        angular.module("myRegService", [])
+            .factory("regService", function ($http) {
+                return {
+                    post: function (url, data) {
+                        var promise = $http.post(url, data)
+                        return promise
+                    }
+                }
+            })
+        angular.module("regApp", ["myRegService", "ngTouch"])
+            .controller("regCtrl", function ($scope, regService) {
+                $scope.User = {}
+                $scope.nameEnable = false;
+                $scope.checkName = function (name) {
+                    regService.post("/UserInfo/CheckUserName", { Uname: name })
+                        .then(function (res) {
+                            if (res.data.msg == "F") {
+                                $scope.nameEnable = true;
+                            } else if (res.data.msg == "S") {
+                                $scope.nameEnable = false;
+                            }
+                        }, function () {
+                            alert("服务器内部错误")
+                        })
+                }
+                $scope.addUser = function ($event, userInfo) {
+                    if (userInfo.Upwd != userInfo.Upwd0) {
+                        alert("两次密码不一致！");
+                        return
+                    }
+                    $event.preventDefault()
+                    //regService.post("/UserInfo/Register", userInfo)
+                    regService.post("msg.json", userInfo)
+                        .then(function (res) {
+                            if (res.data.msg == "S") {
+                                location = "reg_succ.html"
+                            } else {
+                                alert("注册失败")
+                            }
+                        }, function () {
+                            alert("服务器内部错误")
+                        })
+                }
+            })
+
+    </script>
+</body>
+
+</html>

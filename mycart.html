@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>购物车</title>
+    <script type="text/javascript" src="js/main.js"></script>
+    <link href="css/style.css" rel="stylesheet">
+    <style type="text/css">
+        body {
+            background: #f8f8f8
+        }
+
+        .mycart {
+            width: 100%;
+            height: 2.8rem;
+            margin-top: 1.3rem;
+            font-size: 0.3rem;
+            text-align: center;
+        }
+
+        .cart-icon {
+            width: 100%;
+            height: .74rem;
+            background: url("images/cart_0.png") center no-repeat;
+            background-size: auto 100%;
+        }
+
+        .cart-tip {
+            line-height: .74rem;
+            color: #696969
+        }
+
+        .cart-btn {
+            width: 1.37rem;
+            height: .52rem;
+            margin: .35rem auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: .2rem;
+            color: #696969;
+            line-height: .5rem
+        }
+
+        .cart-head {
+            width: 100%;
+            height: .67rem;
+            padding: 0 .14rem;
+            background: #fff;
+            border-bottom: 1px solid #e4e4e4;
+            font-size: .2rem;
+            line-height: .66rem;
+        }
+
+        .cart-head .c img {
+            vertical-align: middle;
+            width: .33rem;
+            margin-right: 5px;
+        }
+
+        .cart-list {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 1.2rem;
+            padding: 0 .14rem;
+            background: #fff;
+            border-bottom: 1px solid #e4e4e4;
+            font-size: .2rem;
+            line-height: .66rem;
+        }
+
+        .cart-btm {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: .68rem;
+            padding: 0 .14rem;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            font-size: .24rem
+        }
+
+        .cart-btm .pay {
+            width: 1.38rem;
+            height: .43rem;
+            line-height: .43rem;
+            background: #f50;
+            border-radius: 5px;
+            color: #fff;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body ng-app="cart" ng-controller="cartCtrl">
+
+    <div ng-if="isShow" class="mycart">
+        <div class="cart-icon"></div>
+        <div class="cart-tip">购物车快饿扁了</div>
+        <div style="color:#b5b5b5;font-size:.2rem"> 快去挑选宝贝吧！</div>
+        <div class="cart-btn" ng-click="shopping()">去逛逛</div>
+    </div>
+    <div ng-if="!isShow" cart-directive products="products">
+
+    </div>
+    <div ng-if="!isShow" class="cart-btm">
+        <div>合计：{{ totalPrice() | currency:"￥" }}</div>
+        <div class="pay">结算 </div>
+    </div>
+
+    <script type="text/javascript" src="script/angular.min.js"></script>
+    <script type="text/javascript" src="script/angular-touch.min.js"></script>
+    <script type="text/javascript">
+        //localStorage.clear()
+        angular.module("myCartDirective", [])
+            .directive("cartDirective", function () {
+                return {
+                    scope: {
+                        products: "=products"
+                    },
+                    templateUrl: "cartlist.html",
+                }
+            })
+
+        angular.module("cart", ["myCartDirective"])
+            .controller("cartCtrl", function ($scope) {
+                $scope.shopping = function () {
+                    location = "index.html"
+                }
+                $scope.products = []
+                angular.forEach(localStorage, function (v) {
+                    $scope.products.push(JSON.parse(v))
+                })
+
+                console.log($scope.products)
+                $scope.isShow = true
+                $scope.showList = function () {
+                    if ($scope.products.length > 0) {
+                        $scope.isShow = false
+                    }
+                }
+
+                $scope.totalPrice = function () {
+                    $scope.sum = 0;
+                    for (i = 0; i < $scope.products.length; i++) {
+                        $scope.sum += $scope.products[i].price * $scope.products[i].buynum
+                    }
+                    return $scope.sum
+                }
+                $scope.showList();
+            })
+    </script>
+
+
+</body>
+
+</html>

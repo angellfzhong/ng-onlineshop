@@ -1,0 +1,13 @@
+        <div class="cart-head">
+            <span class="c"><img src="images/choose_all.png" /> 全选</span>
+        </div>
+        <div class="cart-list" ng-repeat="pro in products">
+            <img src="images/choose_pro.png" /> 
+            <img src="{{ pro.image }}" style="height:1rem" />
+            <p style="width:100%">{{ pro.name}}</p>
+            <div style="width:.9rem; text-align:right">
+                <p>{{ pro.price | currency:"￥"}}</p>
+                <p>×{{ pro.buynum }}</p>
+            </div>
+        </div>
+

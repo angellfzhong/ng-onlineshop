@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>会员中心</title>
+    <script type="text/javascript" src="js/main.js"></script>
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/user.css" rel="stylesheet">
+</head>
+
+<body ng-app="user" ng-controller="userCtrl">
+    <div class="user-back">
+        <ul class="user-info">
+            <li>
+                <div class="user-head">
+                    <img src="images/default_head_img.jpg">
+                </div>
+            </li>
+            <li>
+                <p class="user-name" style="color:#fe3782">{{ user.name }}</p>
+                <p class="user-phone">{{ user.phone }}</p>
+            </li>
+            <li></li>
+        </ul>
+
+        <ul class="user-order">
+            <li class="dfk">待付款</li>
+            <li class="dfh">代发货</li>
+            <li class="dsh">待收货</li>
+            <li class="ywc">已完成</li>
+            <li class="tk">退款/售后</li>
+        </ul>
+
+        <div class="user-list">
+            <span class="dd">全部订单</span>
+        </div>
+        <div class="user-list group">
+            <span class="gwc">购物车</span>
+        </div>
+        <div class="user-list">
+            <span class="ll">浏览记录</span>
+        </div>
+        <div class="user-list group">
+            <span class="pt">我的拼团</span>
+        </div>
+        <div class="user-list">
+            <span class="ye">我的余额</span>
+        </div>
+        <div class="user-list">
+            <span class="jf">我的积分</span>
+        </div>
+        <div class="user-list">
+            <span class="yhj">优惠券</span>
+        </div>
+
+    </div>
+
+
+
+    <footer>
+        <div id="btm-nav">
+            <a class="main" href="index.html">首页</a>
+            <a class="shop" href="shop.html">热销</a>
+            <a class="mycart" href="mycart.html">购物车</a>
+            <a class="user active" href="myindex.html">我的</a>
+        </div>
+    </footer>
+
+
+
+    <script type="text/javascript" src="script/angular.min.js"></script>
+    <script type="text/javascript" src="script/angular-touch.min.js"></script>
+    <script src="script/angular-cookies.min.js"></script>
+    <script type="text/javascript">
+        angular.module("userInfo", [])
+            .factory("userService", function ($http) {
+                return {
+                    getUserInfo: function (url, name) {
+                        var promise = $http.post(url, { name: name })
+                        return promise
+                    }
+                }
+            })
+
+        angular.module("user", ['ngCookies', "userInfo", "ngTouch"])
+            .controller("userCtrl", function ($scope, $cookies, userService) {
+                var name = $cookies.get('uname');
+                if (!name) {
+                    location = "login.html";
+                    return;
+                }
+                userService.getUserInfo("/Userinfo/getModel", name)
+                    .success(function (data) {
+                        $scope.user = {
+                            name: data.Uname,
+                            phone: data.Uphone
+                        }
+                    })
+            })
+    </script>
+
+</body>
+
+</html>

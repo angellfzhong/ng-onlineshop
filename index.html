@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>线上生活超市触屏版</title>
+    <script type="text/javascript" src="js/main.js"></script>
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body ng-app="myApp" ng-controller="cartCtrl" ng-class="{'noScroll':!isHide,'scrollBody':isHide}">
+    <header>
+        <input type="search" id="search" placeholder="请输入商品关键字">
+    </header>
+
+    <main>
+        <div id="slide">
+            <img src="images/s_1.png">
+        </div>
+        <section class="type">
+            <ul class="type-list">
+                <li class="t-01">数码潮品</li>
+                <li class="t-02">日用百货</li>
+                <li class="t-03">休闲美食</li>
+                <li class="t-04">时尚服饰</li>
+                <li class="t-05">跨境购</li>
+                <li class="t-06">酒水饮料</li>
+                <li class="t-07">美容洗护</li>
+                <li class="t-08">品牌专区</li>
+            </ul>
+        </section>
+        <section class="on-sale">
+            <div class="sale1">
+                <div class="sale2">
+                    <img src="images/ad_1.png">
+                </div>
+                <div class="sale2">
+                    <img src="images/ad_3.png">
+                </div>
+            </div>
+            <div class="sale1">
+                <div class="sale2">
+                    <img src="images/ad_2.png">
+                </div>
+                <div class="sale2">
+                    <img src="images/ad_4.png">
+                </div>
+            </div>
+            <div class="sale1">
+                <img src="images/ad_5.png">
+            </div>
+        </section>
+        <div class="banner">
+            <img src="images/b_10.png">
+        </div>
+        <section class="pro-back">
+            <ul class="pro-list">
+                <li ng-repeat="product in products">
+                    <div class="pro-img">
+                        <img src="{{ product.image }}">
+                    </div>
+                    <div class="pro-info">
+                        <p class="pro-tit">{{product.Name}}</p>
+                        <p>
+                            <span class="pro-price">{{product.Price| currency:"￥"}}</span>
+                            <span class="pro-add" ng-click="showCart(product)">添加到购物车</span>
+                        </p>
+                    </div>
+                </li>
+
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <div id="btm-nav">
+            <a class="main" href="index.html">首页</a>
+            <a class="shop" href="shop.html">热销</a>
+            <a class="mycart" href="mycart.html">购物车</a>
+            <a class="user" href="myindex.html">我的</a>
+        </div>
+    </footer>
+    <div class="cover" ng-class="{'hide-cover':isHide,'show-cover':!isHide}"></div>
+
+    <div class="cart" ng-class="{'hide-cart':isShow,'show-cart':!isHide}">
+        <div class="cart-img">
+            <img src="{{ pro.image }}">
+        </div>
+        <div class="cart-tit">
+            <div class="cart-info">
+                <p class="tit">{{pro.Name}}</p>
+                <p class="price">{{pro.Price | currency:"￥"}}</p>
+            </div>
+            <span id="close" ng-click="closeCart()"></span>
+        </div>
+        <div class="cart-size">
+            <p>规格</p>
+            <div class="size" id="size">
+                <span>{{pro.Size}}</span>
+            </div>
+            <!--<div class="size" id="size">
+                <span ng-click="changeSelected($index)" ng-class="{selected: value.selected}" ng-repeat="value in list track by $index">{{value.name}}</span>
+            </div>
+        -->
+        </div>
+        <div class="cart-qty">
+            <div>数量</div>
+            <div>库存：{{ pro.Store }}
+                <div id="qty">
+                    <ul>
+                        <li ng-click="sub()"></li>
+                        <li>{{ pro.buynum}}</li>
+                        <li ng-click="add()"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="cart-buy">
+            <div id="add" ng-click="addToCart(pro)">加入购物车</div>
+            <div id="buy">购买</div>
+        </div>
+
+    </div>
+
+
+    <script type="text/javascript" src="script/angular.min.js"></script>
+    <script type="text/javascript" src="script/angular-touch.min.js"></script>
+    <script type="text/javascript">
+        var app = angular.module('myApp', ['ngTouch']);
+        app.controller("cartCtrl", function ($scope, $http) {
+            // $http.get("/Product/GetModel")
+            $http.get("products.json").success(function (data) {
+                $scope.products = data;
+            }).error(function () {
+                alert("服务器错误")
+            })
+
+            $scope.num = 1;
+            $scope.store = 500;
+            $scope.isHide = true;
+            $scope.isShow = false;
+            $scope.showCart = function (product) {
+                $scope.pro = product
+                $scope.pro.buynum = 1;
+                $scope.isHide = false;
+                //document.documentElement.style.overflow='hidden'
+            }
+            $scope.closeCart = function () {
+                $scope.isHide = true;
+                $scope.isShow = true;
+                //document.documentElement.style.overflow='auto'
+            }
+            $scope.add = function () {
+                if ($scope.pro.buynum < $scope.pro.Store) {
+                    $scope.pro.buynum++;
+                    //$scope.store--;
+                }
+            }
+            $scope.sub = function () {
+                if ($scope.pro.buynum > 1) {
+                    $scope.pro.buynum--;
+                    //$scope.store++;
+                }
+            }
+            $scope.addToCart = function (product) {
+                //alert(product)
+                var myStorage = localStorage;
+                myStorage.setItem(product.Id, JSON.stringify({ "name": product.Name, "price": product.Price, "buynum": product.buynum, "image": product.image }))
+                //myStorage.clear()
+                alert(myStorage.length)
+            }
+        })
+    </script>
+</body>
+
+</html>

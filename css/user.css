@@ -1,0 +1,136 @@
+.user-back{
+    max-width: 640px;
+    margin: 0 auto;
+    font-size: 0.22rem;
+    color: #666;
+}
+
+/* 用户信息  */
+.user-info{
+    display: flex;
+    align-items:center;
+    width: 100%;
+    height: 1.4rem;
+    padding: .25rem .14rem;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+}
+.user-info li:first-child{
+    width: 0.8rem;
+    height: 100%;
+}
+.user-info li:nth-child(2){
+    width: 100%;
+    padding-left:.14rem;
+    line-height: 0.4rem
+}
+.user-info li:last-child{
+    width: 0.18rem;
+    height: 100%;
+    background: url("../images/user_more.png") center no-repeat;
+    background-size: 100%
+}
+.user-phone{
+    background: url("../images/user_phone.png") center left no-repeat;
+    background-size: .24rem;
+     text-indent: .3rem
+}
+.user-head{
+    width: 0.8rem;
+    height: 0.8rem;
+    overflow: hidden;
+}
+.user-head img{
+    width: 100%;
+    vertical-align: top;
+    border-radius: 50%;   
+}
+
+
+/* 订单  */
+.user-order{
+    display: flex;
+    width: 100%;
+    height: 1.15rem;
+    margin-top:0.13rem;
+    padding: .2rem .14rem;
+    border: solid #ddd;
+    border-width: 1px 0;
+    background: #fff;
+}
+.user-order li{
+    flex:1;
+    text-align: center;
+    padding-top:.4rem;
+}
+.user-order .dfk{
+    background: url("../images/user_01.png") center top no-repeat;
+    background-size:auto .34rem;
+}
+.user-order .dfh{
+    background: url("../images/user_02.png") center top no-repeat;
+    background-size:auto .34rem;
+}
+.user-order .dsh{
+    background: url("../images/user_03.png") center top no-repeat;
+    background-size:auto .34rem;
+}
+.user-order .ywc{
+    background: url("../images/user_04.png") center top no-repeat;
+    background-size:auto .34rem;
+}
+.user-order .tk{
+    background: url("../images/user_05.png") center top no-repeat;
+    background-size:auto .34rem;
+}
+
+/*  功能列表  */
+.user-list{
+    width: 100%;
+    height: .77rem;
+    line-height: 0.7rem;
+    padding: 0 .14rem;
+    border-bottom: 1px solid #ddd;
+    background:#fff url("../images/user_more.png") right center no-repeat;
+    background-origin: content-box;
+}
+.user-list.group{
+    margin-top:0.13rem;
+    border-top: 1px solid #ddd;
+}
+.user-list span{
+    display: inline-block;
+    height: 100%;
+    padding-left:0.44rem;
+}
+.user-list .dd{
+    background: url("../images/user_06.png") left center no-repeat;
+    background-size:auto  0.25rem;
+}
+.user-list .gwc{
+    background: url("../images/user_07.png") left center no-repeat;
+    background-size:auto  0.25rem;  
+}
+.user-list .ll{
+    background: url("../images/user_08.png") left center no-repeat;
+    background-size:auto  0.25rem;    
+}
+.user-list .pt{
+    background: url("../images/user_09.png") left center no-repeat;
+    background-size:auto  0.25rem;    
+}
+.user-list .ye{
+    background: url("../images/user_10.png") left center no-repeat;
+    background-size:auto  0.25rem;    
+}
+.user-list .jf{
+    background: url("../images/user_11.png") left center no-repeat;
+    background-size:auto  0.25rem;    
+}
+
+.user-list .yhj{
+    background: url("../images/user_12.png") left center no-repeat;
+    background-size:auto  0.25rem;    
+}
+
+

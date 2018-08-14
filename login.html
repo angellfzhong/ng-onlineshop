@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>线上生活超市触屏版</title>
+    <script type="text/javascript" src="js/main.js"></script>
+    <link  href="css/style.css"  rel="stylesheet">
+</head>
+<body ng-app="loginApp" ng-controller="loginCtrl">
+    <h2 class="login">用户登陆</h2>
+    <form name="loginform" novalidate >
+    <div class="login-bc">
+        <div class="input-bc">
+                <label><span>账户</span> 
+                    <input name="Uname" type="text" placeholder="手机号/用户名" required ng-model="User.name" >
+                    <span class="cancelinput" ng-show="loginform.Uname.$viewValue" 
+                    ng-click="User.name=''"></span>
+                </label>
+            </div>
+            <div class="input-bc">
+                <label><span>密码</span>
+                    <input name="Upwd" type="password" placeholder="请输入密码" required ng-model="User.pwd">
+                     <span class="cancelinput" ng-show="loginform.Upwd.$viewValue" ng-click="User.pwd=''"></span>
+                </label>
+            </div>   
+         </div>
+
+         <button class="login-btn" type="button" ng-click="userLogin($event,User)" 
+         ng-class="{'disabled':loginform.$invalid}" ng-disabled="loginform.$invalid">登陆</button> 
+    </form>
+    <div class="login-rg">
+       <a href="register.html">免费注册</a> <a href="findpsw.html">忘记密码</a> 
+    </div>
+    <script type="text/javascript" src="script/angular.min.js"></script>
+    <script type="text/javascript" src="script/angular-touch.min.js"></script>
+    <script type="text/javascript" src="script/angular-cookies.min.js"></script>
+    <script>
+        angular.module("loginApp", ['ngTouch','ngCookies'])
+        .controller("loginCtrl", function ($scope, $http, $cookies) {
+            if ($cookies.get('uname')) { 
+            //登陆成功后，服务器会设置一对cookies,key是uname value是当前用户名
+                alert("您已登录")
+                window.location = "myindex.html"
+            }
+            $scope.User = {}
+            $scope.userLogin = function ($event, userinfo) {
+                $event.preventDefault();
+                var promise = $http.post("/UserInfo/Login", {Uname: userinfo.name, Upwd: userinfo.pwd })
+                promise.then(function(res){  
+                    //服务器根据匹配结果 返回msg="F" 或msg="S"
+                   if(res.data.msg == "F"){
+                    alert("登陆失败,检查用户名或密码")
+                    return
+                   }else{
+                    location = "myindex.html"
+                   }
+                }, function(){
+                    alert("服务器错误")
+                })
+                  
+            }
+        })
+
+   </script>
+</body>
+</html>
